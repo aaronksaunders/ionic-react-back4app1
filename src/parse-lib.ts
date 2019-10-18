@@ -1,10 +1,15 @@
 import Parse from "parse";
 
+/**
+ * 
+ * @param email 
+ * @param password 
+ */
 async function doLogin(email: string, password: string) {
     try {
-        let u = await Parse.User.logIn(email, password);
-        if (!u.isValid) {
-            return u
+        let user = await Parse.User.logIn(email, password);
+        if (!user.isValid) {
+            return user
         }
     } catch (e) {
         throw e;
@@ -29,6 +34,9 @@ async function uploadWithFile(_file: File) {
     }
 }
 
+/**
+ * 
+ */
 async function doLogout() {
     try {
         let u = await Parse.User.logOut();
@@ -39,6 +47,10 @@ async function doLogout() {
 }
 
 
+/**
+ * 
+ * @param objectType 
+ */
 async function loadObjects(objectType: string) {
     try {
         const OT = Parse.Object.extend(objectType);
@@ -47,8 +59,8 @@ async function loadObjects(objectType: string) {
         // Sorts the results in ascending order by the likes field
         query.ascending("createdAt");
 
-        let v = await query.find()
-        return v;
+        let queryResults = await query.find()
+        return queryResults;
     } catch (e) {
         throw e;
     }
