@@ -1,3 +1,6 @@
+import Parse, { User } from "parse";
+import { doLogin } from "../parse-lib";
+import PARSE_CONFIG from "../parse-config";
 import React, { useState } from "react";
 import {
   IonHeader,
@@ -11,13 +14,18 @@ import {
   IonButton
 } from "@ionic/react";
 
-const Details: React.FC = () => {
+declare module "parse";
+
+const LoginPage: React.FC = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
-  const doSignIn = () => {
-    console.log("username", username);
-    console.log("password", password);
+  const doSignIn = async () => {
+    try {
+      await doLogin(username, password);
+    } catch (e) {
+      alert(e);
+    }
   };
   return (
     <IonPage>
@@ -67,4 +75,23 @@ const Details: React.FC = () => {
   );
 };
 
-export default Details;
+export default LoginPage;
+
+export const useAuthb4a = () => {
+  Parse.serverURL = "https://parseapi.back4app.com"; // This is your Server URL
+  Parse.initialize(PARSE_CONFIG.APP_ID, PARSE_CONFIG.JS_KEY);
+
+  const [state, setAuthState] = React.useState(() => {
+    const user = new Parse.User() as User | null;
+    return { initializing: true, user, Parse };
+  });
+
+  React.useEffect(() => {
+    // listen for auth state changes
+    Parse.User.currentAsync().then(user => {
+      setAuthState({ initializing: false, user, Parse });
+    });
+  }, []);
+
+  return state;
+};

@@ -1,5 +1,5 @@
 import React from "react";
-import { Redirect, Route, Switch } from "react-router-dom";
+import { Redirect, Route, Switch, RouteProps } from "react-router-dom";
 import { IonApp, IonRouterOutlet } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import TabRoot from "./pages/TabRoot";
@@ -23,19 +23,45 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
+import { useAuthb4a } from "./pages/Login";
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-      <Switch>
-        <Route exact path="/login" component={Login} />
-        <Redirect exact from="/" to="home" />
-        <IonRouterOutlet>
-          <Route name="home" path="/home" component={TabRoot} />
-        </IonRouterOutlet>
-      </Switch>
-    </IonReactRouter>
-  </IonApp>
-);
+const App: React.FC = () => {
+  let { user, Parse } = useAuthb4a();
+  console.log(user);
+
+  const ProtectedRoute: React.ComponentType<any> = ({
+    component: Component,
+    ...rest
+  }: {
+    component: React.ComponentType<RouteProps>;
+  }) => (
+    <Route
+      {...rest}
+      render={props => {
+        return Parse.User.current ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{ pathname: "/login", state: { from: props.location } }}
+          />
+        );
+      }}
+    />
+  );
+
+  return (
+    <IonApp>
+      <IonReactRouter>
+        <Switch>
+          <Route exact path="/login" component={Login} />
+          <Redirect exact from="/" to="home" />
+          <IonRouterOutlet>
+            <ProtectedRoute name="home" path="/home" component={TabRoot} />
+          </IonRouterOutlet>
+        </Switch>
+      </IonReactRouter>
+    </IonApp>
+  );
+};
 
 export default App;
