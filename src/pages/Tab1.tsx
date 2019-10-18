@@ -12,7 +12,10 @@ import {
   IonToolbar,
   IonButton,
   IonItem,
-  IonLabel
+  IonLabel,
+  IonImg,
+  IonThumbnail,
+  IonAvatar
 } from "@ionic/react";
 // import { book, build, colorFill, grid } from "ionicons/icons";
 import { doLogout, loadObjects } from "../parse-lib";
@@ -54,6 +57,19 @@ const Tab1: React.FC = () => {
               let d = doc as Parse.Object;
               return (
                 <IonItem key={d.id}>
+                  <IonThumbnail
+                    slot="start"
+                    style={{
+                      height: 150,
+                      width: 150,
+                      backgroundColor: "lightGray"
+                    }}
+                  >
+                    <IonImg
+                      src={d.get("asset").url()}
+                      style={{ objectFit: "scale-down" }}
+                    ></IonImg>
+                  </IonThumbnail>
                   <IonLabel className="ion-text-wrap">
                     <h1>{d.get("name")}</h1>
                     <h2>{d.createdAt.toDateString()}</h2>
