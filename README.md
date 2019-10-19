@@ -15,7 +15,8 @@ Updating some very old parse code to utilize [back4app parse functionality](http
 ```
 const config = {
     APP_ID : "",
-    JS_KEY : ""
+    JS_KEY : "",
+    GRAPHQL_URI : ""
 }
 
 export default config;
