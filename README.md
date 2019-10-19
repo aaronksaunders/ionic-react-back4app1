@@ -9,6 +9,7 @@ Updating some very old parse code to utilize [back4app parse functionality](http
 - React Router
 - Tabs
 - Tabs List Detail
+- GraphQL Support - See Tab2!!
 
 ### Adding your own configuration file `parse.config`
 
