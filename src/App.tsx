@@ -24,6 +24,7 @@ import "@ionic/react/css/display.css";
 /* Theme variables */
 import "./theme/variables.css";
 import { useCheckAuth } from "./utils/parse-hooks";
+
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import PARSE_CONFIG from './parse-config'
