@@ -1,5 +1,10 @@
 import Parse from "parse";
 
+export interface IThing {
+    name?: string;
+    fileName?: string;
+    file?: File;
+  }
 /**
  * 
  * @param email 
@@ -18,15 +23,15 @@ async function doLogin(email: string, password: string) {
 
 /**
  * 
- * @param _file 
+ * @param _options 
  */
-async function uploadWithFile(_file: File) {
+async function uploadWithFile(_options : IThing) {
     try {
-        let f = new Parse.File("file" + Date.now(), "");
+        let f = new Parse.File(_options.fileName as string, _options.file);
         let fileObject = await f.save();
         let entry = new Parse.Object("Thing");
-        entry.set("file", fileObject);
-        entry.set("name", "test with a file objec");
+        entry.set("asset", fileObject);
+        entry.set("name", _options.name);
         let result = await entry.save();
         return result
     } catch (e) {
@@ -57,7 +62,7 @@ async function loadObjects(objectType: string) {
         const query = new Parse.Query(OT);
 
         // Sorts the results in ascending order by the likes field
-        query.ascending("createdAt");
+        query.descending("createdAt");
 
         let queryResults = await query.find()
         return queryResults;
@@ -69,5 +74,6 @@ async function loadObjects(objectType: string) {
 export {
     doLogin,
     doLogout,
-    loadObjects
+    loadObjects,
+    uploadWithFile,
 }

@@ -3,7 +3,6 @@ import {
   IonCardContent,
   IonCardHeader,
   IonCardSubtitle,
-  IonCardTitle,
   IonContent,
   IonHeader,
   IonList,
@@ -14,19 +13,23 @@ import {
   IonItem,
   IonLabel,
   IonImg,
-  IonThumbnail,
-  IonAvatar
+  IonThumbnail
 } from "@ionic/react";
 // import { book, build, colorFill, grid } from "ionicons/icons";
 import { doLogout, loadObjects } from "../parse-lib";
 import React, { useEffect, useState } from "react";
 import "./Tab1.css";
+import { RouteComponentProps } from "react-router";
 
-const Tab1: React.FC = () => {
+const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
   let [myObjects, setMyObjects] = useState([] as Object[]);
+  let [loading, setLoading] = useState(false);
 
   useEffect(() => {
-    loadObjects("Thing").then(setMyObjects);
+    setLoading(true);
+    loadObjects("Thing")
+      .then(setMyObjects)
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -40,53 +43,57 @@ const Tab1: React.FC = () => {
         <IonCard className="welcome-card">
           <IonCardHeader>
             <IonCardSubtitle>Get Started</IonCardSubtitle>
-            <IonCardTitle>Welcome to Ionic</IonCardTitle>
           </IonCardHeader>
           <IonCardContent>
             <p>
-              Now that your app has been created, you'll want to start building
-              out features and components. Check out some of the resources below
-              for next steps.
+              Sample Ionic Framework Application using React Web Components and
+              Back4App Parse Servers
             </p>
           </IonCardContent>
         </IonCard>
 
-        <div className="ion-padding">
-          <IonList>
-            {myObjects.map((doc: any) => {
-              let d = doc as Parse.Object;
-              return (
-                <IonItem key={d.id}>
-                  <IonThumbnail
-                    slot="start"
-                    style={{
-                      height: 150,
-                      width: 150,
-                      backgroundColor: "lightGray"
-                    }}
-                  >
-                    <IonImg
-                      src={d.get("asset").url()}
-                      style={{ objectFit: "scale-down" }}
-                    ></IonImg>
-                  </IonThumbnail>
-                  <IonLabel className="ion-text-wrap">
-                    <h1>{d.get("name")}</h1>
-                    <h2>{d.createdAt.toDateString()}</h2>
-                    <div> {d.id}</div>
-                  </IonLabel>
-                </IonItem>
-              );
-            })}
-          </IonList>
-          <IonButton
-            onClick={async () => {
-              await doLogout();
-            }}
-          >
-            LOGOUT
-          </IonButton>
-        </div>
+        {loading ? (
+          <p>"LOADING"</p>
+        ) : (
+          <div className="ion-padding">
+            <IonList>
+              {myObjects.map((doc: any) => {
+                let d = doc as Parse.Object;
+                return (
+                  <IonItem key={d.id}>
+                    <IonThumbnail
+                      slot="start"
+                      style={{
+                        height: 150,
+                        width: 150,
+                        backgroundColor: "lightGray"
+                      }}
+                    >
+                      <IonImg
+                        src={d.get("asset").url()}
+                        style={{ objectFit: "scale-down" }}
+                      ></IonImg>
+                    </IonThumbnail>
+                    <IonLabel className="ion-text-wrap">
+                      <h1>{d.get("name")}</h1>
+                      <h3>{d.createdAt.toDateString()}</h3>
+                      <h3>{d.get("asset").name()}</h3>
+                      <h3> {d.id}</h3>
+                    </IonLabel>
+                  </IonItem>
+                );
+              })}
+            </IonList>
+            <IonButton
+              onClick={async () => {
+                await doLogout();
+                history.replace("/login");
+              }}
+            >
+              LOGOUT
+            </IonButton>
+          </div>
+        )}
       </IonContent>
     </IonPage>
   );

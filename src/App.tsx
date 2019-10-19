@@ -38,7 +38,8 @@ const App: React.FC = () => {
     <Route
       {...rest}
       render={props => {
-        return Parse.User.current ? (
+        let u = Parse.User.current();
+        return u ? (
           <Component {...props} />
         ) : (
           <Redirect
