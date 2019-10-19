@@ -1,6 +1,5 @@
-import Parse, { User } from "parse";
-import { doLogin } from "../parse-lib";
-import PARSE_CONFIG from "../parse-config";
+import { doLogin } from "../utils/parse-lib";
+
 import React, { useState } from "react";
 import {
   IonHeader,
@@ -15,7 +14,6 @@ import {
 } from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
 
-declare module "parse";
 
 const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
   const [username, setUserName] = useState("");
@@ -79,22 +77,3 @@ const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
 
 export default LoginPage;
 
-export const useAuthb4a = () => {
-  Parse.serverURL = "https://parseapi.back4app.com"; // This is your Server URL
-  Parse.initialize(PARSE_CONFIG.APP_ID, PARSE_CONFIG.JS_KEY);
-
-  const [state, setAuthState] = React.useState({
-    initializing: true,
-    user: null as User | null,
-    Parse
-  });
-
-  React.useEffect(() => {
-    // listen for auth state changes
-    Parse.User.currentAsync().then(user => {
-      setAuthState({ initializing: false, user, Parse });
-    });
-  }, []);
-
-  return state;
-};

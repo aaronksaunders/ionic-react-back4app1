@@ -23,12 +23,16 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import { useAuthb4a } from "./pages/Login";
+import { useCheckAuth } from "./utils/parse-hooks";
 
 const App: React.FC = () => {
-  let { user, Parse } = useAuthb4a();
+  let { user, Parse } = useCheckAuth();
   console.log(user);
 
+  /**
+   * 
+   * @param param0 
+   */
   const ProtectedRoute: React.ComponentType<any> = ({
     component: Component,
     ...rest

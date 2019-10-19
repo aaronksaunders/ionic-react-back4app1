@@ -13,10 +13,11 @@ import {
   IonItem,
   IonLabel,
   IonImg,
-  IonThumbnail
+  IonThumbnail,
+  IonButtons
 } from "@ionic/react";
 // import { book, build, colorFill, grid } from "ionicons/icons";
-import { doLogout, loadObjects } from "../parse-lib";
+import { doLogout, loadObjects } from "../utils/parse-lib";
 import React, { useEffect, useState } from "react";
 import "./Tab1.css";
 import { RouteComponentProps } from "react-router";
@@ -37,6 +38,16 @@ const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
       <IonHeader>
         <IonToolbar>
           <IonTitle>Tab One</IonTitle>
+          <IonButtons slot="end">
+            <IonButton
+              onClick={async () => {
+                await doLogout();
+                history.replace("/login");
+              }}
+            >
+              LOGOUT
+            </IonButton>
+          </IonButtons>
         </IonToolbar>
       </IonHeader>
       <IonContent>
@@ -84,14 +95,6 @@ const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
                 );
               })}
             </IonList>
-            <IonButton
-              onClick={async () => {
-                await doLogout();
-                history.replace("/login");
-              }}
-            >
-              LOGOUT
-            </IonButton>
           </div>
         )}
       </IonContent>

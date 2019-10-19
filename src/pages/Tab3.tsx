@@ -12,7 +12,7 @@ import {
 } from "@ionic/react";
 import AddImage from "./components/AddImage";
 
-import  { uploadWithFile, IThing } from "../parse-lib"
+import  { uploadWithFile, IThing } from "../utils/parse-lib"
 
 const Tab3Page: React.FC = () => {
   let [thingName, setThingName] = useState("");
