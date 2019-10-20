@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import {
   IonHeader,
   IonToolbar,
@@ -15,8 +15,13 @@ import AddImage from "./components/AddImage";
 
 import { uploadWithFile, IThing } from "../utils/parse-lib";
 import { RouteComponentProps } from "react-router-dom";
+import MyContext from "../utils/parse-hooks";
 
 const Tab3Page: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
+
+  // let { useLoadObjects } = useContext(MyContext) as any
+  const { addObject } = useContext(MyContext) as any
+
   // track the name of the thing
   let [thingName, setThingName] = useState("");
 
@@ -55,6 +60,8 @@ const Tab3Page: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
       let result = await uploadWithFile(thingToSave, (_progress: any) => {
         setProgress({ visible: true, value: _progress });
       });
+
+      addObject(result);
 
       // clear varaiables
       clearAll();

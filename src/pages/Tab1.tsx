@@ -17,20 +17,20 @@ import {
   IonButtons,
   IonProgressBar
 } from "@ionic/react";
-import { doLogout, loadObjects } from "../utils/parse-lib";
-import React, { useEffect, useState } from "react";
+import { doLogout, } from "../utils/parse-lib";
+import MyContext from "../utils/parse-hooks";
+import React, { useEffect, useContext } from "react";
 import "./Tab1.css";
 import { RouteComponentProps } from "react-router";
 
-const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
-  let [myObjects, setMyObjects] = useState([] as Object[]);
-  let [loading, setLoading] = useState(false);
 
+
+const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
+
+  let { myObjects, loading, loadParseObjects } = useContext(MyContext) as any
+  
   useEffect(() => {
-    setLoading(true);
-    loadObjects("Thing")
-      .then(setMyObjects)
-      .finally(() => setTimeout(() => setLoading(false), 1000));
+    loadParseObjects()
   }, []);
 
   return (

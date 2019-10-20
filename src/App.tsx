@@ -23,11 +23,13 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import { useCheckAuth } from "./utils/parse-hooks";
+import { useCheckAuth, MyProvider, useLoadObjects } from "./utils/parse-hooks";
 
 import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
-import PARSE_CONFIG from './parse-config'
+import PARSE_CONFIG from "./parse-config";
+
+
 
 const App: React.FC = () => {
   let { user, Parse } = useCheckAuth();
@@ -37,7 +39,7 @@ const App: React.FC = () => {
     uri: PARSE_CONFIG.GRAPHQL_URI,
     headers: {
       "X-Parse-Application-Id": PARSE_CONFIG.APP_ID,
-      "X-Parse-Javascript-Key":PARSE_CONFIG.JS_KEY
+      "X-Parse-Javascript-Key": PARSE_CONFIG.JS_KEY
     }
   });
 
@@ -65,21 +67,23 @@ const App: React.FC = () => {
       }}
     />
   );
-
+debugger;
   return (
-    <ApolloProvider client={client}>
-      <IonApp>
-        <IonReactRouter>
-          <Switch>
-            <Route exact path="/login" component={Login} />
-            <Redirect exact from="/" to="home" />
-            <IonRouterOutlet>
-              <ProtectedRoute name="home" path="/home" component={TabRoot} />
-            </IonRouterOutlet>
-          </Switch>
-        </IonReactRouter>
-      </IonApp>
-    </ApolloProvider>
+    <MyProvider value={useLoadObjects()}>
+      <ApolloProvider client={client}>
+        <IonApp>
+          <IonReactRouter>
+            <Switch>
+              <Route exact path="/login" component={Login} />
+              <Redirect exact from="/" to="home" />
+              <IonRouterOutlet>
+                <ProtectedRoute name="home" path="/home" component={TabRoot} />
+              </IonRouterOutlet>
+            </Switch>
+          </IonReactRouter>
+        </IonApp>
+      </ApolloProvider>
+    </MyProvider>
   );
 };
 
