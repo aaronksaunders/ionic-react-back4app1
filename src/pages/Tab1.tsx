@@ -14,9 +14,9 @@ import {
   IonLabel,
   IonImg,
   IonThumbnail,
-  IonButtons
+  IonButtons,
+  IonProgressBar
 } from "@ionic/react";
-// import { book, build, colorFill, grid } from "ionicons/icons";
 import { doLogout, loadObjects } from "../utils/parse-lib";
 import React, { useEffect, useState } from "react";
 import "./Tab1.css";
@@ -30,7 +30,7 @@ const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
     setLoading(true);
     loadObjects("Thing")
       .then(setMyObjects)
-      .finally(() => setLoading(false));
+      .finally(() => setTimeout(() => setLoading(false), 1000));
   }, []);
 
   return (
@@ -64,7 +64,7 @@ const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
         </IonCard>
 
         {loading ? (
-          <p>"LOADING"</p>
+          <IonProgressBar type="indeterminate"></IonProgressBar>
         ) : (
           <div className="ion-padding">
             <IonList>

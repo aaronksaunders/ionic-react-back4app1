@@ -8,27 +8,68 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonButton
+  IonButton,
+  IonProgressBar
 } from "@ionic/react";
 import AddImage from "./components/AddImage";
 
-import  { uploadWithFile, IThing } from "../utils/parse-lib"
+import { uploadWithFile, IThing } from "../utils/parse-lib";
+import { RouteComponentProps } from "react-router-dom";
 
-const Tab3Page: React.FC = () => {
+const Tab3Page: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
+  // track the name of the thing
   let [thingName, setThingName] = useState("");
-  let [thingFile, setThingFile] = useState({imageData :({} as any), file : {} as File});
 
+  // track the file associated with the thing
+  let [thingFile, setThingFile] = useState({
+    imageData: null as (any | null),
+    file: null as (File | null)
+  });
+  // manage the visibility of the progress indicator
+  let [progress, setProgress] = useState({
+    visible: false,
+    value: 0
+  });
+
+  /**
+   * 
+   */
+  const clearAll = () => {
+    setProgress({ visible: false, value: 0 });
+    setThingFile({ file: null, imageData: null });
+    setThingName("");
+  };
+
+  /**
+   *
+   */
   const saveObject = async () => {
-    let thingToSave : IThing = {
-      name : thingName,
-      file : thingFile.file,
-      fileName : thingFile.imageData.fileName
-    }
+    setProgress({ visible: true, value: 0 });
+    try {
+      let thingToSave: IThing = {
+        name: thingName,
+        file: thingFile.file,
+        fileName: thingFile.imageData.fileName
+      };
 
-    console.log(thingToSave);
-    let result = await uploadWithFile(thingToSave)
-    console.log(result)
-  }
+      let result = await uploadWithFile(thingToSave, (_progress: any) => {
+        setProgress({ visible: true, value: _progress });
+      });
+
+      // clear varaiables
+      clearAll();
+
+      // go to home page
+      history.push("/home/tab1");
+    } catch (e) {
+      // show error
+      alert(e);
+
+      // clear things
+      setProgress({ visible: false, value: 0 });
+    } finally {
+    }
+  };
 
   return (
     <IonPage>
@@ -50,7 +91,6 @@ const Tab3Page: React.FC = () => {
               }}
             ></IonInput>
           </IonItem>
-
         </IonItem>
         <IonItem>
           <AddImage
@@ -58,10 +98,15 @@ const Tab3Page: React.FC = () => {
               setThingFile(_eventData);
             }}
           ></AddImage>
-
-          </IonItem>
-          <IonButton onClick={()=> saveObject()}>SAVE</IonButton>
-          <IonButton>CANCEL</IonButton>
+        </IonItem>
+        {progress.visible ? (
+          <IonProgressBar value={progress.value}></IonProgressBar>
+        ) : (
+          <div>
+            <IonButton onClick={() => saveObject()}>SAVE</IonButton>
+            <IonButton>CANCEL</IonButton>{" "}
+          </div>
+        )}
       </IonContent>
     </IonPage>
   );
