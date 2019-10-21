@@ -14,15 +14,15 @@ import {
 } from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
 
-
 const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
   const doSignIn = async () => {
     try {
-      let u = await doLogin(username, password);
+      let user = await doLogin(username, password);
       history.replace("/home");
+      return user;
     } catch (e) {
       alert(e);
     }
@@ -76,4 +76,3 @@ const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
 };
 
 export default LoginPage;
-

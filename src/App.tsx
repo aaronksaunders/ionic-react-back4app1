@@ -29,8 +29,6 @@ import ApolloClient from "apollo-boost";
 import { ApolloProvider } from "@apollo/react-hooks";
 import PARSE_CONFIG from "./parse-config";
 
-
-
 const App: React.FC = () => {
   let { user, Parse } = useCheckAuth();
   console.log(user);
@@ -67,7 +65,7 @@ const App: React.FC = () => {
       }}
     />
   );
-debugger;
+
   return (
     <MyProvider value={useLoadObjects()}>
       <ApolloProvider client={client}>

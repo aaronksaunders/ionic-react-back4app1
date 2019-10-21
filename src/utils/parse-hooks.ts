@@ -39,7 +39,6 @@ export const useLoadObjects = () => {
   let [loading, setLoading] = useState(false);
 
   const addObject = (_object: any) => {
-    debugger;
     let newArray = [_object, ...myObjects]
     setMyObjects(newArray);
   };
