@@ -1,14 +1,6 @@
 import React from "react";
-import {
-  apps,
-  cloudUploadOutline,
-  flash,
-  listCircleOutline,
-  listOutline,
-  send,
-} from "ionicons/icons";
+import { cloudUploadOutline, listOutline } from "ionicons/icons";
 import Tab1 from "./Tab1";
-import Tab2 from "./Tab2";
 import Tab3 from "./Tab3";
 import Details from "./Details";
 

@@ -10,7 +10,7 @@ import {
   IonInput,
   IonButton,
 } from "@ionic/react";
-import { RouteComponentProps, useHistory } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import { useParseDataProvider } from "../utils/parse-hooks";
 
 const LoginPage: React.FC = () => {
