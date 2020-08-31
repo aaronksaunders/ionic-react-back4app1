@@ -85,13 +85,13 @@ const Tab3Page: React.FC = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab Three</IonTitle>
+          <IonTitle>Upload Object</IonTitle>
         </IonToolbar>
       </IonHeader>
-      <IonContent className="ion-padding">
+      <IonContent>
         <IonCard>
           <IonCardHeader>
-            <IonCardSubtitle>Upload A File</IonCardSubtitle>
+            <IonCardSubtitle>Back4App: Upload A File</IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <p>
@@ -101,29 +101,33 @@ const Tab3Page: React.FC = () => {
             </p>
           </IonCardContent>
         </IonCard>
-        <IonItem style={{ "--padding-start": 0 }}>
-          <IonLabel position="floating">Thing Name</IonLabel>
-          <IonInput
-            value={thingName}
-            placeholder="Test Description to associate with File"
-            onInput={(e) => setThingName((e.target as HTMLInputElement).value)}
-          ></IonInput>
-        </IonItem>
-        <IonItem style={{ "--padding-start": 0 }}>
-          <AddImage
-            onChange={(_eventData: any) => {
-              setThingFile(_eventData);
-            }}
-          ></AddImage>
-        </IonItem>
-        {progress.visible ? (
-          <IonProgressBar value={progress.value}></IonProgressBar>
-        ) : (
-          <div>
-            <IonButton onClick={() => saveObject()}>SAVE</IonButton>
-            <IonButton>CANCEL</IonButton>{" "}
-          </div>
-        )}
+        <div className="ion-padding">
+          <IonItem style={{ "--padding-start": 0 }}>
+            <IonLabel position="floating">Thing Name</IonLabel>
+            <IonInput
+              value={thingName}
+              placeholder="Test Description to associate with File"
+              onInput={(e) =>
+                setThingName((e.target as HTMLInputElement).value)
+              }
+            ></IonInput>
+          </IonItem>
+          <IonItem style={{ "--padding-start": 0 }}>
+            <AddImage
+              onChange={(_eventData: any) => {
+                setThingFile(_eventData);
+              }}
+            ></AddImage>
+          </IonItem>
+          {progress.visible ? (
+            <IonProgressBar value={progress.value}></IonProgressBar>
+          ) : (
+            <div>
+              <IonButton onClick={() => saveObject()}>SAVE</IonButton>
+              <IonButton>CANCEL</IonButton>{" "}
+            </div>
+          )}
+        </div>
       </IonContent>
     </IonPage>
   );

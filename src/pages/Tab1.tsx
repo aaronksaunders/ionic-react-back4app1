@@ -26,7 +26,7 @@ import MyContext from "../utils/parse-hooks";
 import React, { useEffect, useContext } from "react";
 import "./Tab1.css";
 import { useHistory } from "react-router";
-import { trashBinOutline } from "ionicons/icons";
+import { logOutOutline, trashBinOutline } from "ionicons/icons";
 
 const Tab1: React.FC<any> = () => {
   let { myObjects, loading, loadParseObjects } = useContext(MyContext) as any;
@@ -42,7 +42,7 @@ const Tab1: React.FC<any> = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab One</IonTitle>
+          <IonTitle>List Objects</IonTitle>
           <IonButtons slot="end">
             <IonButton
               onClick={async () => {
@@ -50,7 +50,7 @@ const Tab1: React.FC<any> = () => {
                 history.replace("/login");
               }}
             >
-              LOGOUT
+              <IonIcon icon={logOutOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -58,7 +58,7 @@ const Tab1: React.FC<any> = () => {
       <IonContent>
         <IonCard className="welcome-card">
           <IonCardHeader>
-            <IonCardSubtitle>Get Started</IonCardSubtitle>
+            <IonCardSubtitle>Back4App: Getting Started</IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <p>
