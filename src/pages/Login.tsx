@@ -1,4 +1,4 @@
-import { doLogin } from "../utils/parse-lib";
+
 
 import React, { useState } from "react";
 import {
@@ -13,10 +13,13 @@ import {
   IonButton
 } from "@ionic/react";
 import { RouteComponentProps } from "react-router-dom";
+import { useParseDataProvider } from "../utils/parse-hooks";
 
 const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
+
+  const { doLogin } = useParseDataProvider();
 
   const doSignIn = async () => {
     try {

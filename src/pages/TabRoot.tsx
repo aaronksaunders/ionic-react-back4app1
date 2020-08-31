@@ -15,7 +15,7 @@ import {
   IonTabs
 } from "@ionic/react";
 
-const TabRoot = () => {
+const TabRoot:React.FC = () => {
   return (
     <IonTabs>
       <IonRouterOutlet>
@@ -23,7 +23,7 @@ const TabRoot = () => {
         <Route path="/home/tab2" component={Tab2} exact={true} />
         <Route path="/home/tab2/details" component={Details} />
         <Route path="/home/tab3" component={Tab3} />
-        <Route exact path="/home" render={() => <Redirect to="/home/tab1" />} />
+        <Route exact path="/" render={() => <Redirect to="/home/tab1" />} />
       </IonRouterOutlet>
       <IonTabBar slot="bottom">
         <IonTabButton tab="tab1" href="/home/tab1">
@@ -43,4 +43,4 @@ const TabRoot = () => {
   );
 };
 
-export default TabRoot;
+export default React.memo(TabRoot);

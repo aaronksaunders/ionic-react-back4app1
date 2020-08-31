@@ -1,6 +1,6 @@
 import React from "react";
-import { Redirect, Route, Switch, RouteProps } from "react-router-dom";
-import { IonApp, IonRouterOutlet } from "@ionic/react";
+import { Redirect, Route, RouteProps } from "react-router-dom";
+import { IonApp, IonRouterOutlet, IonLoading } from "@ionic/react";
 import { IonReactRouter } from "@ionic/react-router";
 import TabRoot from "./pages/TabRoot";
 import Login from "./pages/Login";
@@ -23,24 +23,10 @@ import "@ionic/react/css/display.css";
 
 /* Theme variables */
 import "./theme/variables.css";
-import { useCheckAuth, MyProvider, useLoadObjects } from "./utils/parse-hooks";
-
-import ApolloClient from "apollo-boost";
-import { ApolloProvider } from "@apollo/react-hooks";
-import PARSE_CONFIG from "./parse-config";
+import { useParseDataProvider } from "./utils/parse-hooks";
 
 const App: React.FC = () => {
-  let { user, Parse } = useCheckAuth();
-  console.log(user);
-
-  const client = new ApolloClient({
-    uri: PARSE_CONFIG.GRAPHQL_URI,
-    headers: {
-      "X-Parse-Application-Id": PARSE_CONFIG.APP_ID,
-      "X-Parse-Javascript-Key": PARSE_CONFIG.JS_KEY
-    }
-  });
-
+  const { initializing } = useParseDataProvider();
   /**
    *
    * @param param0
@@ -50,38 +36,41 @@ const App: React.FC = () => {
     ...rest
   }: {
     component: React.ComponentType<RouteProps>;
-  }) => (
-    <Route
-      {...rest}
-      render={props => {
-        let u = Parse.User.current();
-        return u ? (
-          <Component {...props} />
-        ) : (
-          <Redirect
-            to={{ pathname: "/login", state: { from: props.location } }}
-          />
-        );
-      }}
-    />
-  );
+  }) => {
+    const { user } = useParseDataProvider();
+    return (
+      <Route
+        {...rest}
+        render={(props) => {
+          let u = user;
+          return u ? (
+            <Component {...props} />
+          ) : (
+            <Redirect
+              to={{ pathname: "/login", state: { from: props.location } }}
+            />
+          );
+        }}
+      />
+    );
+  };
 
   return (
-    <MyProvider value={useLoadObjects()}>
-      <ApolloProvider client={client}>
-        <IonApp>
-          <IonReactRouter>
-            <Switch>
+    <IonApp>
+      <IonReactRouter>
+        <IonRouterOutlet>
+          {initializing ? (
+            <IonLoading isOpen={true} />
+          ) : (
+            <>
               <Route exact path="/login" component={Login} />
-              <Redirect exact from="/" to="home" />
-              <IonRouterOutlet>
-                <ProtectedRoute name="home" path="/home" component={TabRoot} />
-              </IonRouterOutlet>
-            </Switch>
-          </IonReactRouter>
-        </IonApp>
-      </ApolloProvider>
-    </MyProvider>
+              <ProtectedRoute name="home" path="/home" component={TabRoot} />
+              <Route path="/" render={() => <Redirect to="/home/tab1" />} />
+            </>
+          )}
+        </IonRouterOutlet>
+      </IonReactRouter>
+    </IonApp>
   );
 };
 

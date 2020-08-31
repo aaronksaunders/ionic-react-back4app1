@@ -15,23 +15,23 @@ import {
   IonImg,
   IonThumbnail,
   IonButtons,
-  IonProgressBar
+  IonProgressBar,
 } from "@ionic/react";
-import { doLogout, } from "../utils/parse-lib";
+import { doLogout } from "../utils/parse-lib";
 import MyContext from "../utils/parse-hooks";
 import React, { useEffect, useContext } from "react";
 import "./Tab1.css";
-import { RouteComponentProps } from "react-router";
+import { useHistory } from "react-router";
 
+const Tab1: React.FC<any> = () => {
+  let { myObjects, loading, loadParseObjects } = useContext(MyContext) as any;
+  const history = useHistory();
 
-
-const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
-
-  let { myObjects, loading, loadParseObjects } = useContext(MyContext) as any
-  
   useEffect(() => {
-    loadParseObjects()
+    (async () => await loadParseObjects())();
   }, []);
+
+  console.log(loading);
 
   return (
     <IonPage>
@@ -70,29 +70,7 @@ const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
             <IonList>
               {myObjects.map((doc: any) => {
                 let d = doc as Parse.Object;
-                return (
-                  <IonItem key={d.id}>
-                    <IonThumbnail
-                      slot="start"
-                      style={{
-                        height: 150,
-                        width: 150,
-                        backgroundColor: "lightGray"
-                      }}
-                    >
-                      <IonImg
-                        src={d.get("asset").url()}
-                        style={{ objectFit: "scale-down" }}
-                      ></IonImg>
-                    </IonThumbnail>
-                    <IonLabel className="ion-text-wrap">
-                      <h1>{d.get("name")}</h1>
-                      <h3>{d.createdAt.toDateString()}</h3>
-                      <h3>{d.get("asset").name()}</h3>
-                      <h3> {d.id}</h3>
-                    </IonLabel>
-                  </IonItem>
-                );
+                return <Item document={d} key={d.id} />;
               })}
             </IonList>
           </div>
@@ -102,4 +80,32 @@ const Tab1: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
   );
 };
 
-export default Tab1;
+export default React.memo(Tab1);
+
+const Item: React.FC<{ document: Parse.Object }> = React.memo(
+  ({ document }) => {
+    return (
+      <IonItem key={document.id}>
+        <IonThumbnail
+          slot="start"
+          style={{
+            height: 150,
+            width: 150,
+            backgroundColor: "lightGray",
+          }}
+        >
+          <IonImg
+            src={document.get("asset").url()}
+            style={{ objectFit: "scale-down" }}
+          ></IonImg>
+        </IonThumbnail>
+        <IonLabel className="ion-text-wrap">
+          <h1>{document.get("name")}</h1>
+          <h3>{document.createdAt.toDateString()}</h3>
+          <h3>{document.get("asset").name()}</h3>
+          <h3> {document.id}</h3>
+        </IonLabel>
+      </IonItem>
+    );
+  }
+);

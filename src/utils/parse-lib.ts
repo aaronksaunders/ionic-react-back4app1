@@ -10,7 +10,7 @@ export interface IThing {
  * @param email
  * @param password
  */
-async function doLogin(email: string, password: string) {
+const doLogin = async (email: string, password: string) => {
   try {
     let user = await Parse.User.logIn(email, password);
     if (!user.isValid) {
@@ -19,7 +19,7 @@ async function doLogin(email: string, password: string) {
   } catch (e) {
     throw e;
   }
-}
+};
 
 /**
  *
