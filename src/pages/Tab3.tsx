@@ -9,35 +9,38 @@ import {
   IonLabel,
   IonInput,
   IonButton,
-  IonProgressBar
+  IonProgressBar,
+  IonCard,
+  IonCardContent,
+  IonCardHeader,
+  IonCardSubtitle,
 } from "@ionic/react";
 import AddImage from "./components/AddImage";
 
 import { uploadWithFile, IThing } from "../utils/parse-lib";
-import { RouteComponentProps } from "react-router-dom";
-import MyContext from "../utils/parse-hooks";
+import ParseDataContext from "../utils/parse-hooks";
+import { useHistory } from "react-router-dom";
 
-const Tab3Page: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
-
-  // let { useLoadObjects } = useContext(MyContext) as any
-  const { addObject } = useContext(MyContext) as any
+const Tab3Page: React.FC = () => {
+  const history = useHistory();
+  const { addObject } = useContext(ParseDataContext) as any;
 
   // track the name of the thing
   let [thingName, setThingName] = useState("");
 
   // track the file associated with the thing
   let [thingFile, setThingFile] = useState({
-    imageData: null as (any | null),
-    file: null as (File | null)
+    imageData: null as any | null,
+    file: null as File | null,
   });
   // manage the visibility of the progress indicator
   let [progress, setProgress] = useState({
     visible: false,
-    value: 0
+    value: 0,
   });
 
   /**
-   * 
+   *
    */
   const clearAll = () => {
     setProgress({ visible: false, value: 0 });
@@ -54,7 +57,7 @@ const Tab3Page: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
       let thingToSave: IThing = {
         name: thingName,
         file: thingFile.file,
-        fileName: thingFile.imageData.fileName
+        fileName: thingFile.imageData.fileName,
       };
 
       let result = await uploadWithFile(thingToSave, (_progress: any) => {
@@ -86,20 +89,27 @@ const Tab3Page: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
         </IonToolbar>
       </IonHeader>
       <IonContent className="ion-padding">
-        <h2>Add An Object w/ File</h2>
-        <IonItem>
-          <IonItem lines="none">
-            <IonLabel position="floating">Thing Name</IonLabel>
-            <IonInput
-              value={thingName}
-              onInput={e => setThingName((e.target as HTMLInputElement).value)}
-              style={{
-                width: "94%"
-              }}
-            ></IonInput>
-          </IonItem>
+        <IonCard>
+          <IonCardHeader>
+            <IonCardSubtitle>Upload A File</IonCardSubtitle>
+          </IonCardHeader>
+          <IonCardContent>
+            <p>
+              Sample Ionic Framework Application using React Web Components and
+              Back4App Parse Servers where we are uploading the file byt
+              associating a Parse.File object with a Parse.Object
+            </p>
+          </IonCardContent>
+        </IonCard>
+        <IonItem style={{ "--padding-start": 0 }}>
+          <IonLabel position="floating">Thing Name</IonLabel>
+          <IonInput
+            value={thingName}
+            placeholder="Test Description to associate with File"
+            onInput={(e) => setThingName((e.target as HTMLInputElement).value)}
+          ></IonInput>
         </IonItem>
-        <IonItem>
+        <IonItem style={{ "--padding-start": 0 }}>
           <AddImage
             onChange={(_eventData: any) => {
               setThingFile(_eventData);

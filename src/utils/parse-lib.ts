@@ -27,8 +27,9 @@ const doLogin = async (email: string, password: string) => {
  */
 async function uploadWithFile(_options: IThing, _callback?: Function) {
   try {
-    let f = new Parse.File(_options.fileName as string, _options.file);
-    let fileObject = await f.save({ progress: _callback });
+    let f = new Parse.File(_options.fileName as string, _options.file as any);
+    // seems like API has changed
+    let fileObject = await f.save({ progress: _callback } as Parse.FullOptions);
     let entry = new Parse.Object("Thing");
     entry.set("asset", fileObject);
     entry.set("name", _options.name);
@@ -70,4 +71,17 @@ async function loadObjects(objectType: string) {
   }
 }
 
-export { doLogin, doLogout, loadObjects, uploadWithFile };
+/**
+ * 
+ * @param pObject 
+ */
+const deleteObject = async (pObject: Parse.Object) => {
+  try {
+    let resp = await pObject.destroy();
+    return resp;
+  } catch (e) {
+    throw e;
+  }
+}
+
+export { doLogin, doLogout, loadObjects, uploadWithFile, deleteObject };

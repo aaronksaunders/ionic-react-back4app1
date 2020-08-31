@@ -1,5 +1,3 @@
-
-
 import React, { useState } from "react";
 import {
   IonHeader,
@@ -10,12 +8,14 @@ import {
   IonItem,
   IonLabel,
   IonInput,
-  IonButton
+  IonButton,
 } from "@ionic/react";
-import { RouteComponentProps } from "react-router-dom";
+import { RouteComponentProps, useHistory } from "react-router-dom";
 import { useParseDataProvider } from "../utils/parse-hooks";
 
-const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
+const LoginPage: React.FC = () => {
+  const history = useHistory();
+
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
 
@@ -24,7 +24,7 @@ const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
   const doSignIn = async () => {
     try {
       let user = await doLogin(username, password);
-      history.replace("/home");
+      history.replace("/home/tab1");
       return user;
     } catch (e) {
       alert(e);
@@ -43,9 +43,9 @@ const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
           <IonInput
             type="email"
             value={username}
-            onInput={e => setUserName((e.target as HTMLInputElement).value)}
+            onInput={(e) => setUserName((e.target as HTMLInputElement).value)}
             style={{
-              width: "94%"
+              width: "94%",
             }}
           />
         </IonItem>
@@ -54,9 +54,9 @@ const LoginPage: React.FC<any> = ({ history }: RouteComponentProps<any>) => {
           <IonInput
             type="password"
             value={password}
-            onInput={e => setPassword((e.target as HTMLInputElement).value)}
+            onInput={(e) => setPassword((e.target as HTMLInputElement).value)}
             style={{
-              width: "94%"
+              width: "94%",
             }}
           />
         </IonItem>
