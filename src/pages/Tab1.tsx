@@ -16,12 +16,17 @@ import {
   IonThumbnail,
   IonButtons,
   IonProgressBar,
+  IonItemSliding,
+  IonItemOptions,
+  IonItemOption,
+  IonIcon,
 } from "@ionic/react";
-import { doLogout } from "../utils/parse-lib";
+import { doLogout, deleteObject } from "../utils/parse-lib";
 import MyContext from "../utils/parse-hooks";
 import React, { useEffect, useContext } from "react";
 import "./Tab1.css";
 import { useHistory } from "react-router";
+import { logOutOutline, trashBinOutline } from "ionicons/icons";
 
 const Tab1: React.FC<any> = () => {
   let { myObjects, loading, loadParseObjects } = useContext(MyContext) as any;
@@ -37,7 +42,7 @@ const Tab1: React.FC<any> = () => {
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab One</IonTitle>
+          <IonTitle>List Objects</IonTitle>
           <IonButtons slot="end">
             <IonButton
               onClick={async () => {
@@ -45,7 +50,7 @@ const Tab1: React.FC<any> = () => {
                 history.replace("/login");
               }}
             >
-              LOGOUT
+              <IonIcon icon={logOutOutline} />
             </IonButton>
           </IonButtons>
         </IonToolbar>
@@ -53,7 +58,7 @@ const Tab1: React.FC<any> = () => {
       <IonContent>
         <IonCard className="welcome-card">
           <IonCardHeader>
-            <IonCardSubtitle>Get Started</IonCardSubtitle>
+            <IonCardSubtitle>Back4App: Getting Started</IonCardSubtitle>
           </IonCardHeader>
           <IonCardContent>
             <p>
@@ -70,7 +75,13 @@ const Tab1: React.FC<any> = () => {
             <IonList>
               {myObjects.map((doc: any) => {
                 let d = doc as Parse.Object;
-                return <Item document={d} key={d.id} />;
+                return (
+                  <Item
+                    document={d}
+                    onDelete={() => deleteObject(d)}
+                    key={d.id}
+                  />
+                );
               })}
             </IonList>
           </div>
@@ -82,15 +93,18 @@ const Tab1: React.FC<any> = () => {
 
 export default React.memo(Tab1);
 
-const Item: React.FC<{ document: Parse.Object }> = React.memo(
-  ({ document }) => {
-    return (
-      <IonItem key={document.id}>
+const Item: React.FC<{
+  document: Parse.Object;
+  onDelete: Function;
+}> = React.memo(({ document, onDelete }) => {
+  return (
+    <IonItemSliding key={document.id}>
+      <IonItem style={{ "--padding-start": 0 }}>
         <IonThumbnail
           slot="start"
           style={{
-            height: 150,
-            width: 150,
+            height: 130,
+            width: 130,
             backgroundColor: "lightGray",
           }}
         >
@@ -106,6 +120,11 @@ const Item: React.FC<{ document: Parse.Object }> = React.memo(
           <h3> {document.id}</h3>
         </IonLabel>
       </IonItem>
-    );
-  }
-);
+      <IonItemOptions>
+        <IonItemOption onClick={() => onDelete()} color="danger">
+          <IonIcon icon={trashBinOutline} size="large" />
+        </IonItemOption>
+      </IonItemOptions>
+    </IonItemSliding>
+  );
+});
